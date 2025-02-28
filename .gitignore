@@ -3,7 +3,7 @@
 *.tar
 *.gz
 *.rar
-
+*.ini
 # 실행 파일 및 바이너리
 *.exe
 *.dll
