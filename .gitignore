@@ -4,6 +4,7 @@
 *.gz
 *.rar
 *.ini
+*.ipynb
 
 # 실행 파일 및 바이너리
 *.exe
@@ -18,3 +19,6 @@ config.json
 # 캐시 및 로그 파일 제외
 *.log
 *.cache
+
+#업로드 하지 않을 폴더 
+Dataset/
