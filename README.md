@@ -1,2 +1,3 @@
 # miracle-project
-miracle life 
+this repository is SeongHyeok's Baisl lab survival story 
+
