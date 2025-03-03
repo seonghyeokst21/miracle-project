@@ -1,8 +1,6 @@
-import importlib
-import libs
-importlib.reload(libs)
 from libs import *
-
+from util import *
+from model import *
 
 dataset_name="selfie2anime"
 channels = 3
@@ -28,9 +26,9 @@ os.makedirs("saved_models/%s" % dataset_name, exist_ok=True)
 
 
 # Losses
-criterion_GAN = torch.nn.MSELoss()
-criterion_cycle = torch.nn.L1Loss()
-criterion_identity = torch.nn.L1Loss()
+criterion_GAN = nn.MSELoss()
+criterion_cycle = nn.L1Loss()
+criterion_identity = nn.L1Loss()
 
 
 input_shape = (channels, img_height, img_width)
@@ -106,6 +104,21 @@ transforms_ = [
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ]
 
+# Training data loader
+dataloader = DataLoader(
+    ImageDataset("../datasets/%s" % dataset_name, transforms_=transforms_, unaligned=True),
+    batch_size=batch_size,
+    shuffle=True,
+    num_workers=n_cpu,
+)
+# Test data loader
+val_dataloader = DataLoader(
+    ImageDataset("../datasets/%s" % dataset_name, transforms_=transforms_, unaligned=True, mode="test"),
+    batch_size=5,
+    shuffle=True,
+    num_workers=1,
+)
+
 
 def sample_images(batches_done):
     """Saves a generated sample from the test set"""
@@ -124,10 +137,9 @@ def sample_images(batches_done):
     # Arange images along y-axis
     image_grid = torch.cat((real_A, fake_B, real_B, fake_A), 1)
     save_image(image_grid, "images/%s/%s.png" % (dataset_name, batches_done), normalize=False)
-
-
-
     prev_time = time.time()
+
+
 for epoch in range(init_epoch, n_epochs):
     for i, batch in enumerate(dataloader):
 

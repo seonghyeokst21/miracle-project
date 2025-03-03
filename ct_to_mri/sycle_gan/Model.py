@@ -1,3 +1,5 @@
+from libs import *
+
 def weights_init_normal(m):
     classname = m.__class__.__name__
     if classname.find("Conv") != -1:
@@ -25,7 +27,7 @@ class ResidualBlock(nn.Module):
     def forward(self, x):
         return x + self.block(x)
 
-        class GeneratorResNet(nn.Module):
+class GeneratorResNet(nn.Module):
     def __init__(self, input_shape, num_residual_blocks):
         super(GeneratorResNet, self).__init__()
 
@@ -72,7 +74,9 @@ class ResidualBlock(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, x):
-        return self.model(x)class Discriminator(nn.Module):
+        return self.model(x)
+    
+class Discriminator(nn.Module):
     def __init__(self, input_shape):
         super(Discriminator, self).__init__()
 
