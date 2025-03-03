@@ -1,4 +1,4 @@
-import Libs
+from libs import *
 
 def to_rgb(image):
     rgb_image = Image.new("RGB", image.size)
@@ -63,18 +63,3 @@ class ReplayBuffer:
                     to_return.append(element)
         return Variable(torch.cat(to_return))
 
-
-# Training data loader
-dataloader = DataLoader(
-    ImageDataset("../datasets/%s" % dataset_name, transforms_=transforms_, unaligned=True),
-    batch_size=batch_size,
-    shuffle=True,
-    num_workers=n_cpu,
-)
-# Test data loader
-val_dataloader = DataLoader(
-    ImageDataset("../datasets/%s" % dataset_name, transforms_=transforms_, unaligned=True, mode="test"),
-    batch_size=5,
-    shuffle=True,
-    num_workers=1,
-)

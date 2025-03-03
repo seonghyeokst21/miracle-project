@@ -1,4 +1,8 @@
+import importlib
 import libs
+importlib.reload(libs)
+from libs import *
+
 
 dataset_name="selfie2anime"
 channels = 3
