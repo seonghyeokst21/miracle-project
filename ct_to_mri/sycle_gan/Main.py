@@ -3,23 +3,27 @@ from util import *
 from model import *
 from trainer import *
 
-dataset_name = "ct_to_mri"
-channels = 3
-img_height = 256
-img_width = 256
-n_residual_blocks = 9
-lr = 0.0002
-b1 = 0.5
-b2 = 0.999
-n_epochs = 200
-init_epoch = 0
-decay_epoch = 100
-lambda_cyc = 10.0
-lambda_id = 5.0
-n_cpu = 8
-batch_size = 1
-sample_interval = 100
-checkpoint_interval = 5
+
+with open("config.yaml", "r") as file:
+    config = yaml.safe_load(file)
+    
+dataset_name        = config["data"]["name"]
+channels            = config["data"]["channels"]
+img_height          = config["data"]["img_height"]
+img_width           = config["data"]["img_width"]
+n_residual_blocks   = config["trainer"]["n_residual_blocks"]
+lr                  = config["trainer"]["lr"]
+b1                  = config["trainer"]["b1"]
+b2                  = config["trainer"]["b2"]
+n_epochs            = config["trainer"]["n_epochs"]
+init_epoch          = config["trainer"]["init_epoch"]
+decay_epoch         = config["trainer"]["decay_epoch"]
+lambda_cyc          = config["trainer"]["lambda_cyc"]
+lambda_id           = config["trainer"]["lambda_id"]
+n_cpu               = config["trainer"]["n_cpu"]
+batch_size          = config["trainer"]["batch_size"]
+sample_interval     = config["trainer"]["sample_interval"]
+checkpoint_interval = config["trainer"]["checkpoint_interval"]
 
 # Create sample and checkpoint directories
 os.makedirs(f"sampleimages/{dataset_name}", exist_ok=True)
