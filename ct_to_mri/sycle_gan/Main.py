@@ -30,9 +30,9 @@ os.makedirs(f"sampleimages/{dataset_name}", exist_ok=True)
 os.makedirs(f"saved_models/{dataset_name}", exist_ok=True)
 
 # Losses
-criterion_GAN = torch.nn.MSELoss()
-criterion_cycle = torch.nn.L1Loss()
-criterion_identity = torch.nn.L1Loss()
+criterion_GAN = nn.MSELoss()
+criterion_cycle = nn.L1Loss()
+criterion_identity = nn.L1Loss()
 
 input_shape = (channels, img_height, img_width)
 
