@@ -2,7 +2,7 @@ from libs import *
 from util import *
 from model import *
 
-dataset_name="selfie2anime"
+dataset_name="ct_to_mri"
 channels = 3
 img_height = 256
 img_width = 256
@@ -21,15 +21,13 @@ sample_interval=100
 checkpoint_interval=5
 
 # Create sample and checkpoint directories
-os.makedirs("images/%s" % dataset_name, exist_ok=True)
+os.makedirs("sampleimages/%s" % dataset_name, exist_ok=True)
 os.makedirs("saved_models/%s" % dataset_name, exist_ok=True)
-
 
 # Losses
 criterion_GAN = nn.MSELoss()
 criterion_cycle = nn.L1Loss()
 criterion_identity = nn.L1Loss()
-
 
 input_shape = (channels, img_height, img_width)
 
