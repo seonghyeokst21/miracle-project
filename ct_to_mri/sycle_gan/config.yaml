@@ -14,10 +14,10 @@ trainer:
   n_cpu : 8
   batch_size : 1 
   sample_interval : 100
-  checkpoint_interval :
+  checkpoint_interval : 5 
 
 data:
-  name : "ct_to_mri" 
+  name : "resize_and_padding" 
   channels: 3
   img_height : 256
   img_width : 256

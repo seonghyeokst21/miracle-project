@@ -20,5 +20,8 @@ config.json
 *.log
 *.cache
 
-#업로드 하지 않을 폴더 
-Dataset/
+#이미지 파일, 모델 가중치 제외
+*.jpg 
+*.png
+*.pth
+#업로드 하지 않을 폴더

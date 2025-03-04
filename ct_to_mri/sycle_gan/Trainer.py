@@ -3,7 +3,7 @@ from util import *
 from model import *
 
 class Trainer:
-    def __init__(self, G_AB, G_BA, D_A, D_B, dataloader, val_dataloader, 
+    def __init__(self, G_AB, G_BA, D_A, D_B, dataloader, val_dataloader, fake_A_buffer, fake_B_buffer,
                  criterion_GAN, criterion_cycle, criterion_identity, optimizer_G, optimizer_D_A, optimizer_D_B,
                  lr_scheduler_G, lr_scheduler_D_A, lr_scheduler_D_B, 
                  lambda_cyc, lambda_id, sample_interval, n_epochs, dataset_name, batch_size):
@@ -13,6 +13,8 @@ class Trainer:
         self.D_B = D_B
         self.dataloader = dataloader
         self.val_dataloader = val_dataloader
+        self.fake_A_buffer = fake_A_buffer
+        self.fake_B_buffer = fake_B_buffer
         self.criterion_GAN = criterion_GAN
         self.criterion_cycle = criterion_cycle
         self.criterion_identity = criterion_identity
@@ -29,7 +31,7 @@ class Trainer:
         self.dataset_name = dataset_name
         self.batch_size = batch_size
         self.prev_time = time.time()
-    
+
     def sample_images(self, batches_done):
         """Saves a generated sample from the test set"""
         imgs = next(iter(self.val_dataloader))
@@ -46,7 +48,7 @@ class Trainer:
         fake_B = make_grid(fake_B, nrow=5, normalize=True)
         # Arange images along y-axis
         image_grid = torch.cat((real_A, fake_B, real_B, fake_A), 1)
-        save_image(image_grid, f"images/{self.dataset_name}/{batches_done}.png", normalize=False)
+        save_image(image_grid, f"sampleimages/{self.dataset_name}/{batches_done}.png", normalize=False)
 
     def train(self, epoch):
         for i, batch in enumerate(self.dataloader):
@@ -97,7 +99,7 @@ class Trainer:
             # (9) Real loss
             loss_real = self.criterion_GAN(self.D_A(real_A), valid)
             # (10) Fake loss (on batch of previously generated samples)
-            fake_A_ = fake_A_buffer.push_and_pop(fake_A)
+            fake_A_ = self.fake_A_buffer.push_and_pop(fake_A)
             loss_fake = self.criterion_GAN(self.D_A(fake_A_.detach()), fake)
             # (11) Total loss
             loss_D_A = (loss_real + loss_fake) / 2
@@ -111,7 +113,7 @@ class Trainer:
             # (13) Real loss
             loss_real = self.criterion_GAN(self.D_B(real_B), valid)
             # (14) Fake loss (on batch of previously generated samples)
-            fake_B_ = fake_B_buffer.push_and_pop(fake_B)
+            fake_B_ = self.fake_B_buffer.push_and_pop(fake_B)
             loss_fake = self.criterion_GAN(self.D_B(fake_B_.detach()), fake)
             # (15) Total loss
             loss_D_B = (loss_real + loss_fake) / 2
