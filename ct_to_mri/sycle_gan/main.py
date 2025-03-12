@@ -3,6 +3,7 @@ from util import *
 from model import *
 from trainer import *
 
+#설정 불러오기 
 with open("ct_to_mri/sycle_gan/config.yaml", "r") as file:
     config = yaml.safe_load(file)
 

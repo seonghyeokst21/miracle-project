@@ -39,7 +39,7 @@ class GeneratorResNet(nn.Module):
             nn.ReflectionPad2d(channels),
             nn.Conv2d(channels, out_features, 7),
             nn.InstanceNorm2d(out_features),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
         ]
         in_features = out_features
 
@@ -49,7 +49,7 @@ class GeneratorResNet(nn.Module):
             model += [
                 nn.Conv2d(in_features, out_features, 3, stride=2, padding=1),
                 nn.InstanceNorm2d(out_features),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(inplace=True),
             ]
             in_features = out_features
 
@@ -62,9 +62,9 @@ class GeneratorResNet(nn.Module):
             out_features //= 2
             model += [
                 nn.Upsample(scale_factor=2),
-                nn.Conv2d(in_features, out_features, 3, stride=1, padding=1),
+                nn.ConvTranspose2d(in_features, out_features, kernel_size=3, stride=2, padding=1, output_padding=1)
                 nn.InstanceNorm2d(out_features),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(inplace=True),
             ]
             in_features = out_features
 

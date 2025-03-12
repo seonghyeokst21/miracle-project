@@ -36,7 +36,7 @@ class ImageDataset(Dataset):
         item_A = self.transform(image_A)
         item_B = self.transform(image_B)
         return {"A": item_A, "B": item_B}
-
+    
     def __len__(self):
         return max(len(self.files_A), len(self.files_B))
 
