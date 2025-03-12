@@ -91,6 +91,7 @@ class Discriminator(nn.Module):
             if normalize:
                 layers.append(nn.InstanceNorm2d(out_filters))
             layers.append(nn.LeakyReLU(0.2, inplace=True))
+            layers.append(nn.Dropout(0.3))  # Dropout 추가
             return layers
 
         self.model = nn.Sequential(

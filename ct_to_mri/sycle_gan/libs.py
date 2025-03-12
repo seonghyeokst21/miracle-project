@@ -17,12 +17,11 @@ from torch.autograd import Variable
 from torchvision import datasets, transforms
 from torchvision.utils import save_image, make_grid
 from PIL import Image
+import matplotlib.pyplot as plt
 
- 
- # 올바른 __all__ 설정 (점(.) 없이 모듈명만 나열)
+# 올바른 __all__ 설정 (중복된 import 항목 제거하고 누락된 항목 추가)
 __all__ = [
     "glob", "random", "os", "sys", "math", "itertools", "datetime", "time", "np",
     "torch", "nn", "F", "Dataset", "DataLoader", "Variable", "datasets", "transforms",
-    "save_image", "make_grid", "Image", "yaml", "Tensor"
+    "save_image", "make_grid", "Image", "yaml", "Tensor", "plt"
 ]
-

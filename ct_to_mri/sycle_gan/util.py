@@ -51,7 +51,6 @@ class ReplayBuffer:
         to_return = []
         for element in data.data:
             element = torch.unsqueeze(element, 0)
-            print(f"Adding element to buffer: {element.shape}")  # Debugging line
             if len(self.data) < self.max_size:
                 self.data.append(element)
                 to_return.append(element)

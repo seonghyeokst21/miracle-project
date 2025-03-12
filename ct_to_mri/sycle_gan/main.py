@@ -3,10 +3,9 @@ from util import *
 from model import *
 from trainer import *
 
-
 with open("ct_to_mri/sycle_gan/config.yaml", "r") as file:
     config = yaml.safe_load(file)
-    
+
 dataset_name        = config["data"]["name"]
 channels            = config["data"]["channels"]
 img_height          = config["data"]["img_height"]
@@ -32,7 +31,6 @@ transforms_ = [
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ]
-
 
 # Create sample and checkpoint directories
 os.makedirs(f"sampleimages/{dataset_name}", exist_ok=True)
@@ -72,8 +70,8 @@ D_B.apply(weights_init_normal)
 optimizer_G = torch.optim.Adam(
     itertools.chain(G_AB.parameters(), G_BA.parameters()), lr=lr, betas=(b1, b2)
 )
-optimizer_D_A = torch.optim.Adam(D_A.parameters(), lr=lr, betas=(b1, b2))
-optimizer_D_B = torch.optim.Adam(D_B.parameters(), lr=lr, betas=(b1, b2))
+optimizer_D_A = torch.optim.Adam(D_A.parameters(), lr=lr/3, betas=(b1, b2))
+optimizer_D_B = torch.optim.Adam(D_B.parameters(), lr=lr/3, betas=(b1, b2))
 
 # Learning rate update schedulers
 lr_scheduler_G = torch.optim.lr_scheduler.LambdaLR(
@@ -87,11 +85,10 @@ lr_scheduler_D_B = torch.optim.lr_scheduler.LambdaLR(
 )
 
 # Buffers of previously generated samples
-fake_A_buffer = ReplayBuffer()
-fake_B_buffer = ReplayBuffer()
+fake_A_buffer = ReplayBuffer(max_size=50)
+fake_B_buffer = ReplayBuffer(max_size=50)
 
 # Training data loader
-
 dataloader = DataLoader(
     ImageDataset(f"ct_to_mri/Dataset_processed/{dataset_name}", transforms_=transforms_, unaligned=True),
     batch_size=batch_size,
@@ -117,21 +114,22 @@ trainer = Trainer(
 )
 
 if __name__ == '__main__':
-    # 훈련 루프
+    # Training loop
     for epoch in range(init_epoch, n_epochs):
-        trainer.train(epoch)
+        loss_G, loss_D = trainer.train(epoch)  # Train the model
 
-        # 학습률 업데이트
+        # Update learning rates
         lr_scheduler_G.step()
         lr_scheduler_D_A.step()
         lr_scheduler_D_B.step()
 
-        # 모델 체크포인트 저장
+        # Save model checkpoint
         if checkpoint_interval != -1 and epoch % checkpoint_interval == 0:
-            # 디렉토리 생성
+            # Create checkpoint directory
             os.makedirs(f"saved_models/{dataset_name}", exist_ok=True)
             
             torch.save(G_AB.state_dict(), f"saved_models/{dataset_name}/G_AB_{epoch}.pth")
             torch.save(G_BA.state_dict(), f"saved_models/{dataset_name}/G_BA_{epoch}.pth")
             torch.save(D_A.state_dict(), f"saved_models/{dataset_name}/D_A_{epoch}.pth")
             torch.save(D_B.state_dict(), f"saved_models/{dataset_name}/D_B_{epoch}.pth")
+

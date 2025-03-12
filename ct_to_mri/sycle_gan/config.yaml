@@ -6,18 +6,18 @@ trainer:
   lr : 0.0002
   b1 : 0.5
   b2 : 0.999
-  n_epochs : 200
+  n_epochs : 400
   init_epoch : 0
   decay_epoch : 100
-  lambda_cyc : 10.0 
-  lambda_id : 5.0
+  lambda_cyc : 10
+  lambda_id : 5
   n_cpu : 8
-  batch_size : 1 
+  batch_size : 8
   sample_interval : 100
   checkpoint_interval : 5 
 
 data:
-  name : "resize_and_padding" 
+  name : "resize_and_padding3" 
   channels: 3
   img_height : 256
   img_width : 256
